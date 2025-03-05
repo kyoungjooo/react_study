@@ -1,17 +1,4 @@
-const initialGameBoard = [
-  [null, null, null],
-  [null, null, null],
-  [null, null, null],
-];
-export default function GameBoard({ handlegetSelectedSquare, gameTurns }) {
-  //gameTurns의 상태에서 파생된 gameBoard
-  let gameBoard = initialGameBoard;
-
-  for (const gameTurn of gameTurns) {
-    const { square, player } = gameTurn;
-    const { row, col } = square;
-    gameBoard[row][col] = player;
-  }
+export default function GameBoard({ handlegetSelectedSquare, gameBoard }) {
   return (
     <ul id="game-board">
       {gameBoard.map((row, rowIndex) => (
@@ -19,7 +6,9 @@ export default function GameBoard({ handlegetSelectedSquare, gameTurns }) {
           <ul>
             {row.map((playerSymbol, colIndex) => (
               <li key={colIndex}>
-                <button onClick={() => handlegetSelectedSquare(rowIndex, colIndex)}>{playerSymbol}</button>
+                <button onClick={() => handlegetSelectedSquare(rowIndex, colIndex)} disabled={playerSymbol !== null}>
+                  {playerSymbol}
+                </button>
               </li>
             ))}
           </ul>

@@ -1,4 +1,4 @@
-export function Log({ gameTurns }) {
+export default function Log({ gameTurns }) {
   return (
     <ul id="log">
       {gameTurns.map((turn) => {

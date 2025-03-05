@@ -24,11 +24,14 @@ function deriveActivePlayer(gameTurns) {
 
 function App() {
   const [gameTurns, setGameTurns] = useState([]);
-
+  const [playerName, setPlayerName] = useState({
+    X: "Player1",
+    O: "Player2",
+  });
   //현재 누가 플레이어인지 UI에 반영하는 용도
   const activePlayer = deriveActivePlayer(gameTurns);
 
-  let gameBoard = initialGameBoard;
+  let gameBoard = [...initialGameBoard].map((array) => [...array]);
 
   for (const gameTurn of gameTurns) {
     const { square, player } = gameTurn;
@@ -49,7 +52,7 @@ function App() {
     const thirdSquareSymbol = gameBoard[combination[2].row][combination[2].column];
 
     if (firstSquareSymbol && firstSquareSymbol === secondSquareSymbol && firstSquareSymbol === thirdSquareSymbol) {
-      winner = firstSquareSymbol;
+      winner = playerName[firstSquareSymbol];
     }
   }
 
@@ -63,14 +66,32 @@ function App() {
     });
   };
 
+  const handleRematch = () => {
+    setGameTurns([]);
+  };
+
+  const handleChangePlayerName = (symbol, playerName) => {
+    setPlayerName((prev) => ({ ...prev, [symbol]: playerName }));
+  };
+
   return (
     <main>
       <div id="game-container">
         <ul id="players" className="highlight-player">
-          <Player initialName="player1" symbol="X" isActive={activePlayer === "X"} />
-          <Player initialName="player2" symbol="O" isActive={activePlayer === "O"} />
+          <Player
+            initialName="player1"
+            symbol="X"
+            isActive={activePlayer === "X"}
+            handleChangePlayerName={handleChangePlayerName}
+          />
+          <Player
+            initialName="player2"
+            symbol="O"
+            isActive={activePlayer === "O"}
+            handleChangePlayerName={handleChangePlayerName}
+          />
         </ul>
-        {(winner || isDraw) && <GameOver winner={winner} />}
+        {(winner || isDraw) && <GameOver winner={winner} handleRematch={handleRematch} />}
         <GameBoard handlegetSelectedSquare={handlegetSelectedSquare} gameBoard={gameBoard} />
       </div>
       <Log gameTurns={gameTurns} />

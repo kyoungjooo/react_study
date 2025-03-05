@@ -1,47 +1,33 @@
 import { useState } from "react";
-import "./App.css";
 import GameBoard from "./components/GameBoard";
 import Player from "./components/Player";
 import Log from "./components/Log";
-import { WINNING_COMBINATIONS } from "./winning-combinations";
 import GameOver from "./components/GameOver";
+import { WINNING_COMBINATIONS } from "./winning-combinations";
+import "./App.css";
 
-const initialGameBoard = [
+const INITIAL_GAME_BOARD = [
   [null, null, null],
   [null, null, null],
   [null, null, null],
 ];
+const PLAYERS = {
+  X: "PLAYER1",
+  O: "PLAYER2",
+};
 
-function deriveActivePlayer(gameTurns) {
+const deriveActivePlayer = (gameTurns) => {
   let currentPlayer = "X";
+  // 기본적으로 currentPlayer은 X이다.
   if (gameTurns.length > 0 && gameTurns[0].player === "X") {
     currentPlayer = "O";
   }
-  // 기본적으로 currentPlayer은 X이다.
   // 이전이 X라면 currentPlayer은 O이다.
   return currentPlayer;
-}
+};
 
-function App() {
-  const [gameTurns, setGameTurns] = useState([]);
-  const [playerName, setPlayerName] = useState({
-    X: "Player1",
-    O: "Player2",
-  });
-  //현재 누가 플레이어인지 UI에 반영하는 용도
-  const activePlayer = deriveActivePlayer(gameTurns);
-
-  let gameBoard = [...initialGameBoard].map((array) => [...array]);
-
-  for (const gameTurn of gameTurns) {
-    const { square, player } = gameTurn;
-    const { row, col } = square;
-    gameBoard[row][col] = player;
-  }
-
-  let winner = null;
-  const isDraw = gameTurns.length === 9 && !winner;
-
+const deriveWinner = (gameBoard, playerName) => {
+  let winner;
   //게임판에서 symbol 추출해 우승 조건에 맞는지 확인
   for (const combination of WINNING_COMBINATIONS) {
     //combination -> 하나의 승리 조합(배열)
@@ -55,9 +41,29 @@ function App() {
       winner = playerName[firstSquareSymbol];
     }
   }
+  return winner;
+};
 
+const deriveGameBoard = (gameTurns) => {
+  let gameBoard = [...INITIAL_GAME_BOARD].map((array) => [...array]);
+  for (const gameTurn of gameTurns) {
+    const { square, player } = gameTurn;
+    const { row, col } = square;
+    gameBoard[row][col] = player;
+  }
+  return gameBoard;
+};
+
+function App() {
+  const [gameTurns, setGameTurns] = useState([]);
+  const [playerName, setPlayerName] = useState(PLAYERS);
+
+  //현재 누가 플레이어인지 UI에 반영하는 용도
+  const activePlayer = deriveActivePlayer(gameTurns);
+  const gameBoard = deriveGameBoard(gameTurns);
+  const winner = deriveWinner(gameBoard, playerName);
+  const isDraw = gameTurns.length === 9 && !winner;
   const handlegetSelectedSquare = (rowIndex, colIndex) => {
-    //버튼을 누른 후
     setGameTurns((prevTurns) => {
       //현재 상태가 아닌, 이전 상태(prevTurns) 기준으로 activePlayer 계산
       const currentPlayer = deriveActivePlayer(prevTurns);
@@ -66,9 +72,7 @@ function App() {
     });
   };
 
-  const handleRematch = () => {
-    setGameTurns([]);
-  };
+  const handleRematch = () => setGameTurns([]);
 
   const handleChangePlayerName = (symbol, playerName) => {
     setPlayerName((prev) => ({ ...prev, [symbol]: playerName }));
@@ -79,13 +83,13 @@ function App() {
       <div id="game-container">
         <ul id="players" className="highlight-player">
           <Player
-            initialName="player1"
+            initialName={PLAYERS.X}
             symbol="X"
             isActive={activePlayer === "X"}
             handleChangePlayerName={handleChangePlayerName}
           />
           <Player
-            initialName="player2"
+            initialName={PLAYERS.O}
             symbol="O"
             isActive={activePlayer === "O"}
             handleChangePlayerName={handleChangePlayerName}

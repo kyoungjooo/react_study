@@ -13,7 +13,7 @@ export default function Player() {
   return (
     <section id="player">
       {/* enteredPlayerName 값 true, false 상관없이 null, undefinded 일때만 "unknown entity" 반환 */}
-      <h2>Welcome {enteredPlayerName ?? "unknown entity"}</h2>
+      <h2>Welcome {enteredPlayerName ?? "Enter your name here!"}</h2>
       <div>
         <input ref={playerNameRef} type="text" />
         <button type="button" onClick={handleSettingUserName}>

@@ -16,14 +16,17 @@ export default function ResultModal({
       open() {
         dialog.current.showModal();
       },
+      onClose() {
+        dialog.current.onReset();
+      },
     };
   };
   useImperativeHandle(ref, handleOpen);
 
   return (
-    <dialog ref={dialog} className="result-modal">
+    <dialog ref={dialog} className="result-modal" onClose={handleReset}>
       {yourLost && <h2>You lost</h2>}
-      {!yourLost && <h2>Your Score {score}</h2>}
+      {!yourLost && <h2>Your Score: {score}</h2>}
       <p>
         The target timer is {targetTime} second{targetTime > 1 ? "s" : ""}
       </p>

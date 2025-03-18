@@ -11,9 +11,14 @@ export default function TimerChallenge({ title, targetTime }) {
 
   // timeRemaining 0 이되도 게임 종료 초기화
   if (timeRemaining <= 0) {
+    //시간내에 멈추지 못했을 때
     clearInterval(timerRef.current);
-    setTimeRemaining(targetTime * 1000);
+    modalRef.current.open();
   }
+
+  const handleReset = () => {
+    setTimeRemaining(targetTime * 1000);
+  };
 
   const handleStartTimer = () => {
     timerRef.current = setInterval(() => {
@@ -24,14 +29,19 @@ export default function TimerChallenge({ title, targetTime }) {
   //stop 버튼을 눌렀을 때
   const handleStopTimer = () => {
     clearInterval(timerRef.current);
+    modalRef.current.open();
   };
 
   return (
     <>
-      <ResultModal ref={modalRef} targetTime={targetTime} result="lost" />
+      <ResultModal
+        ref={modalRef}
+        targetTime={targetTime}
+        timeRemaining={timeRemaining}
+        handleReset={handleReset}
+      />
       <section className="challenge">
         <h2>{title}</h2>
-        {timerIsActive && <p>game is over!</p>}
         <div className="challenge-time">
           {targetTime} second{targetTime > 1 ? "s" : ""}
         </div>

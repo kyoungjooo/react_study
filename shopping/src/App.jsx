@@ -74,12 +74,13 @@ function App() {
   const ctxValue = {
     items: shoppingCart.items,
     addItemToCart: handleAddItemToCart,
+    updateCartItemQuantity: handleUpdateCartItemQuantity,
   };
 
   return (
     //value로 전달한 ctxValue가 실제 Context 값
     <CartContext.Provider value={ctxValue}>
-      <Header onUpdateCartItemQuantity={handleUpdateCartItemQuantity} />
+      <Header />
       <Shop onAddItemToCart={handleAddItemToCart}>
         {DUMMY_PRODUCTS.map((product) => (
           <li key={product.id}>

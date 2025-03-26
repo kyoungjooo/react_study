@@ -3,7 +3,7 @@ import Header from "./components/Header.jsx";
 import Shop from "./components/Shop.jsx";
 import { DUMMY_PRODUCTS } from "./dummy-products.js";
 import Product from "./components/Product.jsx";
-import { CartContext } from "../../countdown/src/store/cartContext.jsx";
+import { CartContext } from "./store/cartContext.jsx";
 
 function App() {
   const [shoppingCart, setShoppingCart] = useState({
@@ -79,10 +79,7 @@ function App() {
   return (
     //value로 전달한 ctxValue가 실제 Context 값
     <CartContext.Provider value={ctxValue}>
-      <Header
-        cart={shoppingCart}
-        onUpdateCartItemQuantity={handleUpdateCartItemQuantity}
-      />
+      <Header onUpdateCartItemQuantity={handleUpdateCartItemQuantity} />
       <Shop onAddItemToCart={handleAddItemToCart}>
         {DUMMY_PRODUCTS.map((product) => (
           <li key={product.id}>

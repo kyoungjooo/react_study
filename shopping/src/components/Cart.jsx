@@ -1,4 +1,4 @@
-import { CartContext } from "../../../countdown/src/store/cartContext";
+import { CartContext } from "../store/cartContext";
 import { useContext } from "react";
 
 export default function Cart({ onUpdateItemQuantity }) {

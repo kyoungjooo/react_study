@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { CartContext } from "../../../countdown/src/store/cartContext";
+import { CartContext } from "../store/cartContext";
 export default function Product({ id, image, title, price, description }) {
   const { addItemToCart } = useContext(CartContext);
 

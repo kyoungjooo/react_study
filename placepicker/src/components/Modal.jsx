@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
-export default function Modal({ children, open }) {
+export default function Modal({ children, open, onClose }) {
   const dialogRef = useRef(); //ref 자체는 렌더링 결과에 영향을 주는 게 아님
   console.log(dialogRef.current); //undefined
   //렌더링이 완료된 후에 dialogRef.current에 접근 가능
@@ -15,9 +15,9 @@ export default function Modal({ children, open }) {
   }, [open]); //open이 바뀔 때마다 실행
 
   return createPortal(
-    //화면에 보이는 내용이나 JSX 구조 자체를 변경하지 않는다
-    <dialog className="modal" ref={dialogRef}>
-      {children}
+    //화면에 보이는 내용이나 JSX 구조 자체를 변경X
+    <dialog className="modal" ref={dialogRef} onClose={onClose}>
+      {open ? children : null}
     </dialog>,
     document.getElementById("modal")
   );

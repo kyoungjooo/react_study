@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Input from "./Input";
 
 export default function Login() {
   const [enteredValues, setEnteredValues] = useState({
@@ -12,6 +13,8 @@ export default function Login() {
   });
 
   const emailIsInvalid = didEdit.email && !enteredValues.email.includes("@");
+  const passwordIsInvalid =
+    didEdit.password && !enteredValues.password.length < 6;
 
   const handleInputBlur = (name) => {
     setDidEdit((prevEdit) => ({ ...prevEdit, [name]: true }));
@@ -31,32 +34,27 @@ export default function Login() {
       <h2>Login</h2>
 
       <div className="control-row">
-        <div className="control no-margin">
-          <label htmlFor="email">Email</label>
-          <input
-            id="email"
-            type="email"
-            name="email"
-            onBlur={() => handleInputBlur("email")}
-            onChange={(e) => handleInputChange("email", e.target.value)}
-            value={enteredValues.email}
-          />
-          <div className="control-error">
-            {emailIsInvalid && <p>유효한 이메일 주소를 입력해주세요</p>}
-          </div>
-        </div>
+        <Input
+          id="email"
+          type="email"
+          name="email"
+          label="Email"
+          value={enteredValues.email}
+          onBlur={() => handleInputBlur("email")}
+          onChange={(e) => handleInputChange("email", e.target.value)}
+          error={emailIsInvalid && "이메일 형식에 맞게 입력해주세요"}
+        />
 
-        <div className="control no-margin">
-          <label htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            name="password"
-            onBlur={() => handleInputBlur("password")}
-            onChange={(e) => handleInputChange("password", e.target.value)}
-            value={enteredValues.password}
-          />
-        </div>
+        <Input
+          id="password"
+          type="password"
+          name="password"
+          label="password"
+          value={enteredValues.password}
+          onBlur={() => handleInputBlur("password")}
+          onChange={(e) => handleInputChange("password", e.target.value)}
+          error={passwordIsInvalid && "비밀번호를 6글자 이상 입력해주세요"}
+        />
       </div>
 
       <p className="form-actions">

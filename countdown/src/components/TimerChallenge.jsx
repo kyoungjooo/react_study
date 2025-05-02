@@ -13,7 +13,7 @@ export default function TimerChallenge({ title, targetTime }) {
   if (timeRemaining <= 0) {
     //시간내에 멈추지 못했을 때
     clearInterval(timerRef.current);
-    modalRef.current.open();
+    modalRef.current.showModal();
   }
 
   const handleReset = () => {

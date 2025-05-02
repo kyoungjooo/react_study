@@ -1,32 +1,31 @@
-import { useState } from "react";
 import Input from "./Input";
+import { useInput } from "../hooks/useInput";
+import { hasMinLength, isEmail, isNotEmpty } from "../util/validation";
 
 export default function Login() {
-  const [enteredValues, setEnteredValues] = useState({
-    email: "",
-    password: "",
-  });
+  const {
+    value: emailValue,
+    handleInputChange: handleEmailChange,
+    handleInputBlur: handleEmailBlur,
+    hasError: emailHasError,
+    //"값을 받아 유효한지 판단하는 함수" 자체가 들어감
+    //이름이 없고, 즉석에서 만들어진 함수 그 자체를 넘기는 것
+    //value는 함수의 "매개변수(parameter)" 이름
+  } = useInput("", (value) => isEmail(value) && isNotEmpty(value));
 
-  const [didEdit, setDidEdit] = useState({
-    email: false,
-    password: false,
-  });
+  const {
+    value: passwordValue,
+    handleInputChange: handlePasswordChange,
+    handleInputBlur: handlePasswordBlur,
+    hasError: passwordHasError,
+  } = useInput("", (value) => hasMinLength(value, 6));
 
-  const emailIsInvalid = didEdit.email && !enteredValues.email.includes("@");
-  const passwordIsInvalid =
-    didEdit.password && !enteredValues.password.length < 6;
-
-  const handleInputBlur = (name) => {
-    setDidEdit((prevEdit) => ({ ...prevEdit, [name]: true }));
-  };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(enteredValues);
-  };
-
-  const handleInputChange = (name, value) => {
-    setEnteredValues((prev) => ({ ...prev, [name]: value }));
-    setDidEdit((prevEdit) => ({ ...prevEdit, [name]: false }));
+    if (emailHasError || passwordHasError) {
+      return;
+    }
+    console.log(emailValue, passwordValue);
   };
 
   return (
@@ -39,10 +38,10 @@ export default function Login() {
           type="email"
           name="email"
           label="Email"
-          value={enteredValues.email}
-          onBlur={() => handleInputBlur("email")}
-          onChange={(e) => handleInputChange("email", e.target.value)}
-          error={emailIsInvalid && "이메일 형식에 맞게 입력해주세요"}
+          value={emailValue}
+          onBlur={handleEmailBlur}
+          onChange={handleEmailChange}
+          error={emailHasError && "이메일 형식에 맞게 입력해주세요"}
         />
 
         <Input
@@ -50,10 +49,10 @@ export default function Login() {
           type="password"
           name="password"
           label="password"
-          value={enteredValues.password}
-          onBlur={() => handleInputBlur("password")}
-          onChange={(e) => handleInputChange("password", e.target.value)}
-          error={passwordIsInvalid && "비밀번호를 6글자 이상 입력해주세요"}
+          value={passwordValue}
+          onBlur={handlePasswordBlur}
+          onChange={handlePasswordChange}
+          error={passwordHasError && "비밀번호를 6글자 이상 입력해주세요"}
         />
       </div>
 

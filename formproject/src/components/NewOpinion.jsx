@@ -33,7 +33,9 @@ export function NewOpinion() {
     return { errors: null };
   };
 
-  const [formState, formAction] = useActionState(postAction, { errors: null });
+  const [formState, formAction, pending] = useActionState(postAction, {
+    errors: null,
+  });
   return (
     <div id="new-opinion">
       <h2>Share your opinion!</h2>
@@ -76,7 +78,9 @@ export function NewOpinion() {
           </ul>
         )}
         <p className="actions">
-          <button type="submit">Submit</button>
+          <button type="submit" disabled={pending}>
+            {pending ? "제출중..." : "Submit"}
+          </button>
         </p>
       </form>
     </div>

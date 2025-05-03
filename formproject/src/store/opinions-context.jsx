@@ -40,7 +40,15 @@ export function OpinionsContextProvider({ children }) {
     setOpinions((prevOpinions) => [savedOpinion, ...prevOpinions]);
   }
 
-  function upvoteOpinion(id) {
+  async function upvoteOpinion(id) {
+    //fetch()는 원래 Promise를 반환하는 비동기 함수
+    //"이 요청이 끝날 때까지 기다렸다가, 그 다음 줄 (setOpinions)을 실행해라!" 라는 의미
+    const res = await fetch(`http://localhost:3000/opinions/${id}/upvote`, {
+      method: "POST",
+    });
+    if (!res.ok) {
+      return;
+    }
     setOpinions((prevOpinions) => {
       return prevOpinions.map((opinion) => {
         if (opinion.id === id) {
@@ -51,7 +59,13 @@ export function OpinionsContextProvider({ children }) {
     });
   }
 
-  function downvoteOpinion(id) {
+  async function downvoteOpinion(id) {
+    const res = await fetch(`http://localhost:3000/opinions/${id}/downvote`, {
+      method: "POST",
+    });
+    if (!res.ok) {
+      return;
+    }
     setOpinions((prevOpinions) => {
       return prevOpinions.map((opinion) => {
         if (opinion.id === id) {

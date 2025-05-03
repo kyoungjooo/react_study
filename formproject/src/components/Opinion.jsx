@@ -1,4 +1,31 @@
+import { use } from "react";
+import { OpinionsContext } from "../store/opinions-context";
+import { useActionState } from "react";
+import { useOptimistic } from "react";
+
 export function Opinion({ opinion: { id, title, body, userName, votes } }) {
+  const { upvoteOpinion, downvoteOpinion } = use(OpinionsContext);
+  const [optimisticVotes, setVoteOptimistically] = useOptimistic(
+    votes,
+    (prevVotes, mode) => (mode === "up" ? prevVotes + 1 : prevVotes - 1)
+  );
+
+  const handleUpVote = async () => {
+    setVoteOptimistically("up");
+    //upvoteOpinion() 자체가 Promise를 반환하는 비동기 함수
+    await upvoteOpinion(id);
+    console.log("up");
+  };
+  const handleDownVote = async () => {
+    setVoteOptimistically("down");
+    await downvoteOpinion(id);
+    console.log("down");
+  };
+
+  const [upvoteFormState, upvoteFormAction, upvotePending] =
+    useActionState(handleUpVote);
+  const [downvoteFormState, downvoteFormAction, downvotePending] =
+    useActionState(handleDownVote);
   return (
     <article>
       <header>
@@ -7,7 +34,10 @@ export function Opinion({ opinion: { id, title, body, userName, votes } }) {
       </header>
       <p>{body}</p>
       <form className="votes">
-        <button>
+        <button
+          formAction={upvoteFormAction}
+          disabled={upvotePending || downvotePending}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -25,9 +55,12 @@ export function Opinion({ opinion: { id, title, body, userName, votes } }) {
           </svg>
         </button>
 
-        <span>{votes}</span>
+        <span>{optimisticVotes}</span>
 
-        <button>
+        <button
+          formAction={downvoteFormAction}
+          disabled={upvotePending || downvotePending}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"

@@ -1,7 +1,9 @@
-import { useActionState } from "react";
+import { useActionState, use } from "react";
+import { OpinionsContext } from "../store/opinions-context";
 
 export function NewOpinion() {
-  const postAction = (prevFormState, formData) => {
+  const { addOpinion } = use(OpinionsContext);
+  const postAction = async (prevFormState, formData) => {
     const userName = formData.get("userName");
     const title = formData.get("title");
     const body = formData.get("body");
@@ -27,6 +29,7 @@ export function NewOpinion() {
         },
       };
     }
+    await addOpinion({ userName, title, body });
     return { errors: null };
   };
 
@@ -42,7 +45,7 @@ export function NewOpinion() {
               type="text"
               id="userName"
               name="userName"
-              defaultValue={postAction.enteredValues?.userName}
+              defaultValue={formState.enteredValues?.userName}
             />
           </p>
 
@@ -52,7 +55,7 @@ export function NewOpinion() {
               type="text"
               id="title"
               name="title"
-              defaultValue={postAction.enteredValues?.title}
+              defaultValue={formState.enteredValues?.title}
             />
           </p>
         </div>
@@ -62,7 +65,7 @@ export function NewOpinion() {
             id="body"
             name="body"
             rows={5}
-            defaultValue={postAction.enteredValues?.body}
+            defaultValue={formState.enteredValues?.body}
           ></textarea>
         </p>
         {formState.errors && (

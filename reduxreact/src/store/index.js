@@ -6,7 +6,7 @@ const counterSlice = createSlice({
   name: "counter", //slice 이름
   initialState,
   reducers: {
-    //어떤 액션을 했는지에 따라 메서드가 자동으로 호출됨!
+    //어떤 액션을 했는지에 따라 메서드가 자동으로 호출됨
     increment(state) {
       state.counter++;
     },
@@ -14,32 +14,19 @@ const counterSlice = createSlice({
       state.counter--;
     },
     increase(state, action) {
-      state.counter = state.counter + action.amount;
+      state.counter = state.counter + action.payload;
     },
     toggle(state) {
       state.show = !state.show;
     },
   },
 });
-// const counterReducer = (state = initialState, action) => {
-//   if (action.type === "increment") {
-//     return { ...state, counter: state.counter + 1 };
-//   }
-//   if (action.type === "increase") {
-//     return { ...state, counter: state.counter + action.amount };
-//   }
-//   if (action.type === "decrement") {
-//     return { ...state, counter: state.counter - 1 };
-//   }
-//   if (action.type === "toggle") {
-//     return { ...state, show: !state.show };
-//   }
-//   return state;
-// };
+
 const store = configureStore({
   reducer: counterSlice.reducer, //전역 상태를 담당하는 메인 리듀서로서 사용 가능
 });
 
+export const counterActions = counterSlice.actions;
 /*
 const store = configureStore({
   reducer: {counter:counterSlice.reducer}

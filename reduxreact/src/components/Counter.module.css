@@ -21,3 +21,8 @@
   margin: 2rem 0;
   font-weight: bold;
 }
+.flex {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+}

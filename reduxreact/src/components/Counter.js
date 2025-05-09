@@ -1,6 +1,6 @@
+import { counterActions } from "../store/counter";
 import classes from "./Counter.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { counterActions } from "../store";
 
 const Counter = () => {
   //redux store에 대한 action 을 보내는 함수

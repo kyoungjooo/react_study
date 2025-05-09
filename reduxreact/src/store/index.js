@@ -1,14 +1,51 @@
-import { createStore } from "redux";
+// import { createStore } from "redux";
+import { createSlice, configureStore } from "@reduxjs/toolkit";
 
-const counterReducer = (state = { counter: 0 }, action) => {
-  if (action.type === "increment") {
-    return { counter: state.counter + 1 };
-  }
-  if (action.type === "decrement") {
-    return { counter: state.counter - 1 };
-  }
-  return state;
-};
-const store = createStore(counterReducer);
+const initialState = { counter: 0, show: true };
+const counterSlice = createSlice({
+  name: "counter", //slice 이름
+  initialState,
+  reducers: {
+    //어떤 액션을 했는지에 따라 메서드가 자동으로 호출됨!
+    increment(state) {
+      state.counter++;
+    },
+    decrement(state) {
+      state.counter--;
+    },
+    increase(state, action) {
+      state.counter = state.counter + action.amount;
+    },
+    toggle(state) {
+      state.show = !state.show;
+    },
+  },
+});
+// const counterReducer = (state = initialState, action) => {
+//   if (action.type === "increment") {
+//     return { ...state, counter: state.counter + 1 };
+//   }
+//   if (action.type === "increase") {
+//     return { ...state, counter: state.counter + action.amount };
+//   }
+//   if (action.type === "decrement") {
+//     return { ...state, counter: state.counter - 1 };
+//   }
+//   if (action.type === "toggle") {
+//     return { ...state, show: !state.show };
+//   }
+//   return state;
+// };
+const store = configureStore({
+  reducer: counterSlice.reducer, //전역 상태를 담당하는 메인 리듀서로서 사용 가능
+});
+
+/*
+const store = configureStore({
+  reducer: {counter:counterSlice.reducer}
+  규모가 큰 앱에서 상태 slice 가 여러 개라면, 해당 reducer key 값 대신에 객체를 설정해서 그 객체 안에 원하는대로 속성 이름을 정하고 (key 값 설정),
+  그 프로퍼티의 값이 또다른 리듀서 함수가 되는 것
+});
+*/
 
 export default store;

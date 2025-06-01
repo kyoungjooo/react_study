@@ -7,6 +7,7 @@ type todoContextType = {
   removeTodo: (id: string) => void;
 };
 
+//기본값을 지정
 export const TodosContext = React.createContext<todoContextType>({
   items: [],
   addTodo: () => {},
@@ -28,11 +29,13 @@ const TodosContextProvider: React.FC<{ children: React.ReactNode }> = (
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
   };
 
+  //Context 값 설정 및 제공
   const contextValue: todoContextType = {
     items: todos,
     addTodo: addTodoHandler,
     removeTodo: removeTodoHandler,
   };
+
   return (
     <TodosContext.Provider value={contextValue}>
       {props.children}

@@ -15,18 +15,14 @@ export default function FindEventSection() {
     //처음 입력창이 비어있을 때, 사용자가 검색어를 지워서 비워있을 때 구분 필요
     enabled: searchTerm !== undefined,
   });
-
   let content = <p>Please enter a search term and to find events.</p>;
-
   function handleSubmit(event) {
     event.preventDefault();
     setSearchTerm(searchElement.current.value);
   }
-
   if (isLoading) {
     content = <LoadingIndicator />;
   }
-
   if (isError) {
     content = (
       <ErrorBlock

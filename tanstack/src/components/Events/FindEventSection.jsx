@@ -10,20 +10,24 @@ export default function FindEventSection() {
   const [searchTerm, setSearchTerm] = useState();
 
   const { data, isLoading, error, isError } = useQuery({
-    queryKey: ["events", { search: searchTerm }],
-    queryFn: ({ signal }) => fetchEvents({ signal, searchTerm }),
+    queryKey: ["events", { searchTerm }],
+    queryFn: ({ signal, queryKey }) => fetchEvents({ signal, ...queryKey[1] }),
     //검색어 입력할때까지 쿼리 비활성화
     //처음 입력창이 비어있을 때, 사용자가 검색어를 지워서 비워있을 때 구분 필요
     enabled: searchTerm !== undefined,
   });
+
   let content = <p>Please enter a search term and to find events.</p>;
+
   function handleSubmit(event) {
     event.preventDefault();
     setSearchTerm(searchElement.current.value);
   }
+
   if (isLoading) {
     content = <LoadingIndicator />;
   }
+
   if (isError) {
     content = (
       <ErrorBlock

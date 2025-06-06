@@ -8,6 +8,7 @@ import { queryClient } from "../../util/http.js";
 
 export default function NewEvent() {
   const navigate = useNavigate();
+
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: createNewEvent,
     onSuccess: () => {
@@ -15,6 +16,7 @@ export default function NewEvent() {
       navigate("/events");
     },
   });
+
   function handleSubmit(formData) {
     mutate({ event: formData });
   }

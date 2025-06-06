@@ -12,7 +12,7 @@ export default function EventForm({ inputData, onSubmit, children }) {
   }
 
   const { data } = useQuery({
-    queryKey: ["event-images"],
+    queryKey: ["event-images"], //이미지 목록
     queryFn: fetchSelectableImages,
   });
 
@@ -20,7 +20,6 @@ export default function EventForm({ inputData, onSubmit, children }) {
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
-
     onSubmit({ ...data, image: selectedImage });
   }
 
